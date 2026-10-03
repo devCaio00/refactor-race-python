@@ -5,13 +5,7 @@ ORDERS_PROCESSED = []
 
 def process_order(customer, items, coupon="", state="MG", express=False):
 
-    # cálculo do subtotal
-    total1 = 0
-    for x in items:
-        if x["qty"] > 0:
-            total1 = total1 + (x["price"] * x["qty"])
-
-    # alguém colocou outro cálculo porque não confiava no primeiro
+    #Cálculo do subtotal
     subtotal = 0
     for x in items:
         if x["qty"] > 0:
@@ -19,29 +13,34 @@ def process_order(customer, items, coupon="", state="MG", express=False):
 
     desconto = 0
 
-    # desconto por tipo de cliente
-    if customer["type"] == "vip":
-        if subtotal >= 1000:
-            desconto = subtotal * 0.15
-        else:
-            desconto = subtotal * 0.10
+    #Desconto por tipo de cliente
+
+    if customer["type"] == "vip" and subtotal >= 1000:
+        desconto = subtotal * 0.15
+
     else:
-        if customer["type"] == "employee":
-            desconto = subtotal * 0.20
-        else:
-            if customer["type"] == "regular":
-                if subtotal >= 800:
-                    desconto = subtotal * 0.05
+        desconto = subtotal * 0.10
 
-    # cupons
-    if coupon == "PROMO10":
-        desconto = desconto + subtotal * 0.10
+    if  customer["type"] == "employee":
+        desconto = subtotal * 0.20
 
-    if coupon == "PROMO20" and subtotal >= 500:
-        desconto = desconto + subtotal * 0.20
+    elif customer["type"] == "regular" and subtotal >= 800 : 
+        desconto = subtotal * 0.05
 
-    if coupon == "VIP50" and customer["type"] == "vip":
-        desconto = desconto + 50
+
+    #Cupons
+    match coupon:
+        case "PROMO10":
+            desconto_adicional = subtotal * 0.10
+        case "PROMO20" if subtotal >= 500:
+            desconto_adicional = subtotal * 0.20
+        case "VIP50" if customer.get("type") == "vip":
+            desconto_adicional = 50
+        case _:
+            # Cupom inválido ou sem condições atingidas
+            desconto_adicional = 0
+
+    desconto += desconto_adicional
 
     # desconto máximo permitido
     if desconto > subtotal * 0.25:
