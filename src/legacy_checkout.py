@@ -30,7 +30,7 @@ def process_order(customer, items, coupon="", state="MG", express=False):
 
     #Cupons
     match coupon:
-        
+
         case "PROMO10":
             desconto_adicional = subtotal * 0.10
         case "PROMO20" if subtotal >= 500:
@@ -43,32 +43,38 @@ def process_order(customer, items, coupon="", state="MG", express=False):
 
     desconto += desconto_adicional
 
-    # desconto máximo permitido
-    if desconto > subtotal * 0.25:
-        desconto = subtotal * 0.25
+    #Desconto máximo permitido
+    limite_maximo = subtotal * 0.25
+    desconto = min(desconto, limite_maximo)
 
     valor_com_desconto = subtotal - desconto
 
-    # peso total
+    #Peso total
     peso = 0
+
     for produto in items:
         peso += produto.get("weight", 0) * produto["qty"]
 
-    # frete
+
+    #Frete
     frete = 0
 
-    if subtotal >= 500 and express == False:
+    if subtotal >= 500 and not express:
         frete = 0
+
     else:
-        if state == "MG" or state == "SP" or state == "RJ" or state == "ES":
+        ESTADOS_SUDESTE = {"MG", "SP", "RJ", "ES"}
+        if state in ESTADOS_SUDESTE:
             frete = 20 + peso * 0.4
         else:
             frete = 35 + peso * 0.6
 
-        if express == True:
-            frete = frete * 1.8
+        if express:
+            frete *= 1.8
+        
+    
 
-    # impostos
+    #Impostos
     taxa = 0
 
     if state == "MG":
