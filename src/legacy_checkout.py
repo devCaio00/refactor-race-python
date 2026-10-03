@@ -77,16 +77,17 @@ def process_order(customer, items, coupon="", state="MG", express=False):
     #Impostos
     taxa = 0
 
-    if state == "MG":
-        taxa = 0.07
-    elif state == "SP":
-        taxa = 0.09
-    elif state == "RJ":
-        taxa = 0.08
-    elif state == "ES":
-        taxa = 0.07
-    else:
-        taxa = 0.12
+    match state:
+        case "MG":
+            taxa = 0.07
+        case "SP":
+            taxa = 0.09
+        case "RJ":
+            taxa = 0.08
+        case "ES":
+            taxa = 0.07
+        case _:
+            taxa = 0.12
 
     imposto = valor_com_desconto * taxa
 
