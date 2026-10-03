@@ -30,6 +30,7 @@ def process_order(customer, items, coupon="", state="MG", express=False):
 
     #Cupons
     match coupon:
+        
         case "PROMO10":
             desconto_adicional = subtotal * 0.10
         case "PROMO20" if subtotal >= 500:
