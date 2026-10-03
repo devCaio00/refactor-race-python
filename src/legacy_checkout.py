@@ -91,7 +91,7 @@ def process_order(customer, items, coupon="", state="MG", express=False):
 
     imposto = valor_com_desconto * taxa
 
-    # pontos de fidelidade
+    #Pontos de fidelidade
     pontos = 0
 
     if customer["type"] == "vip":
@@ -99,17 +99,17 @@ def process_order(customer, items, coupon="", state="MG", express=False):
     else:
         pontos = int((valor_com_desconto + frete + imposto) / 10)
 
-    # procura produtos repetidos de forma bem pouco elegante
+
+    #Procura produtos repetidos de forma bem pouco elegante
     duplicados = []
 
     for i in range(len(items)):
         for j in range(len(items)):
-            if i != j:
-                if items[i]["name"] == items[j]["name"]:
-                    if items[i]["name"] not in duplicados:
-                        duplicados.append(items[i]["name"])
-
+            if i != j and items[i]["name"] == items[j]["name"] and items[i]["name"] not in duplicados:
+                duplicados.append(items[i]["name"])
+                
     total_final = round(valor_com_desconto + frete + imposto, 2)
+
 
     resultado = {
         "customer": customer["name"],
