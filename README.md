@@ -87,7 +87,7 @@
     # TESTE DE VALIDAÇÃO CÓDIGO NÃO MODIFICADO
     Os testes passaram e fico top
 
-    tests/test_checkout.py::test_regular_customer PASSED                                                [ 25%]
+    tests/test_checkout.py::test_regular_customer PASSED                                            [ 25%]
 tests/test_checkout.py::test_vip_customer PASSED                                                    [ 50%]
 tests/test_checkout.py::test_coupon PASSED                                                          [ 75%]
 tests/test_checkout.py::test_duplicate_products PASSED                                              [100%]
